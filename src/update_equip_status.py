@@ -12,8 +12,6 @@ w3 = Web3(Web3.HTTPProvider(RPC_URL))
 
 AVATAR_ADDRESS = "0x0Ef38aE5B7Ba0B8641cf34C2B9bAC3694B92EeFF"
 
-AVATAR_ABI = json.load(open("contract-artifacts/MiladyAvatar.json"))["abi"]
-
 EQUIP_EVENT_SIGNATURE = w3.keccak(text="AccessoryEquipped(uint256,uint256)").hex()
 print(EQUIP_EVENT_SIGNATURE)
 UNEQUIP_EVENT_SIGNATURE = w3.keccak(text="AccessoryUnequipped(uint256,uint256)").hex()
@@ -34,9 +32,6 @@ def main():
     logging.basicConfig(filename='equip_state_update.log', level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
 
     logging.info("Starting Avatar equip/unequip event processing")
-
-    # Connect to Avatar contract
-    avatarContract = w3.eth.contract(address=AVATAR_ADDRESS, abi=AVATAR_ABI)
 
     # Get last block processed
     lastBlockProcessed = getLastBlockProcessed()
@@ -89,9 +84,11 @@ def main():
 
         # if this is an equip event, add the accessoryId to the equip state for this miladyId
         if hexlifiedTopic == EQUIP_EVENT_SIGNATURE:
+            print(f"equipping {accessoryId} to {miladyId}")
             equipState[str(miladyId)].append(accessoryId)
         # if this is an unequip event, remove the accessoryId from the equip state for this miladyId
         elif hexlifiedTopic == UNEQUIP_EVENT_SIGNATURE:
+            print(f"unequipping {accessoryId} from {miladyId}")
             try:
                 equipState[str(miladyId)].remove(accessoryId)
             except ValueError:
