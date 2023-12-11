@@ -5,6 +5,7 @@
 from web3 import Web3
 import logging
 import json
+from pathlib import Path
 
 RPC_URL = open("secrets/eth_node_url.txt", "r").read().strip()
 
@@ -95,9 +96,16 @@ def main():
                 raise Exception("Unequip event for accessory that was not equipped")
         else:
             raise Exception("Event signature not recognized")
+
     
     # write equip state to json file
     json.dump(equipState, open("./data/equip_state.json", "w"))
+
+    # order a rendering for each milady by inserting a file into the rerenders_needed directory
+    # we do this in a separate loop here so that the order comes after the equip state update write
+    for event in events:
+        miladyId = int(event["topics"][1].hex(), 16)
+        Path(f"rerenders_needed/{miladyId}").touch()
 
     logging.info(f"Finished processing {len(events)} events for blocks {fromBlock} to {toBlock}")
     # update last block processed
