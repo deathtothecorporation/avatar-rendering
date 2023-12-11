@@ -1,0 +1,1 @@
+Scripts meant to keep a set of images up to date for avatars given their current equip status.
