@@ -1,2 +1,2 @@
-python3 update_equip_status.py
-python3 update_renders.py
+python3 src/update_equip_status.py
+python3 src/update_renders.py
