@@ -62,7 +62,9 @@ def renderAndUploadAvatar(i, equippedAccessoryIds, s3Client):
     logging.info(f"saving {i}")
     image.save('render.png')
     destName = str(i) + '.png'
-    logging.info(uploadFile(s3Client, 'render.png', destName))
+    response = uploadFile(s3Client, 'render.png', destName)
+    if response['ResponseMetadata']['HTTPStatusCode'] != 200:
+        raise Exception(f"Failed to upload {i} to s3 with status code {response['ResponseMetadata']['HTTPStatusCode']}")
     os.remove('render.png')
     logging.info(f"done {i}")
 
