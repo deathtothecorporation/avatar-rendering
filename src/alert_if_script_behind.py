@@ -37,6 +37,7 @@ def getLogTextOfLastRun():
 
 
 async def main():
+    print("running alert script")
     w3 = Web3(Web3.HTTPProvider(open("./secrets/eth_node_url.txt", "r").read().strip()))
 
     bot = getBot()

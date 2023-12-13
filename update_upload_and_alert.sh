@@ -1,0 +1,2 @@
+python3 src/update_and_upload.py
+python3 src/alert_if_script_behind.py
