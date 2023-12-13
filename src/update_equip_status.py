@@ -30,7 +30,7 @@ def updateLastBlockProcessed(blockNumber):
         file.write(str(blockNumber))
 
 def main():
-    logging.basicConfig(filename='equip_state_update.log', level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
+    logging.basicConfig(filename='equip_and_update.log', level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
 
     logging.info("Starting Avatar equip/unequip event processing")
 

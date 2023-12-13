@@ -2,6 +2,7 @@ import os
 from render_avatar import renderAvatar
 import json
 import boto3
+import logging
 
 def setupS3Client():
     SPACES_KEY = "DO00VCRGC6EKX3EU7JZ9"
@@ -24,10 +25,14 @@ def uploadFile(filepath, destName):
         ContentType='image/png'
     )
 
+logging.basicConfig(filename='equip_and_update.log', level=logging.INFO, format='%(asctime)s %(levelname)s:%(message)s')
+
+logging.info("Starting render and upload script")
+
 # get list of filenames in directory rerenders_needed
 rerendersNeeded = [int(id) for id in os.listdir('rerenders_needed')]
 if len(rerendersNeeded) == 0:
-    print('No rerenders needed')
+    logging.info('No rerenders needed')
     exit()
 
 rerendersNeeded.sort()
@@ -55,14 +60,14 @@ for i in rerendersNeeded:
     drawableComponents.update(equippedComponents)
 
     # render avatar and save
-    print(f"rendering {i}")
+    logging.info(f"rendering {i}")
     image = renderAvatar(i, drawableComponents)
-    print(f"saving {i}")
+    logging.info(f"saving {i}")
     image.save('render.png')
     destName = str(i) + '.png'
     # print(f"uploading as {destName}")
-    print(uploadFile('render.png', destName))
+    logging.info(uploadFile('render.png', destName))
     os.remove('render.png')
 
     os.remove('rerenders_needed/' + str(i))
-    print(f"done {i}")
+    logging.info(f"done {i}")
